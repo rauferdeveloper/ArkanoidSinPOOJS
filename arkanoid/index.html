@@ -22,7 +22,6 @@
       position: absolute;
       top: 275px;
       left: 850px;
-      background-color: #000000
     }
  
   </style>
@@ -329,7 +328,7 @@
               }
             }
             else if (contTop >= parseInt(ladrillos[j].style.top) && contTop <= parseInt(ladrillos[j].style.top) + parseInt(ladrillos[j].style.height)) {
-              if (contLeft == parseInt(ladrillos[j].style.left)) {
+              if (contLeft+parseInt(pelota.style.width) == parseInt(ladrillos[j].style.left)) {
                 caja.removeChild(ladrillos[j]);
 
                 pelotaConLadrillo.play();
@@ -340,7 +339,7 @@
                 ladrillosDestruidos[j] = true;
                 arriba = true;
                 izquierda = false;
-              } else if (contLeft == parseInt(ladrillos[j].style.left) + parseInt(ladrillos[j].style.width) - parseInt(pelota.style.width)) {
+              } else if (contLeft == parseInt(ladrillos[j].style.left) + parseInt(ladrillos[j].style.width)) {
                 caja.removeChild(ladrillos[j]);
                 pelotaConLadrillo.play();
                 cantLadrillosDestruidos++;
