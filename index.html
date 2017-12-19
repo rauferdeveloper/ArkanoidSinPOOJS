@@ -97,7 +97,7 @@
       var intervaloColor;//Intervalo para los colores de fondo para el texto si ha ganado o perdido la partida
       var titulo;//titulo del texto has perdido
       var divPuntos;//Caja que nos muestra los datos de la partida que ha ganado
-
+      var vidas =3;
       //Construimos los ladrillos
       var ladrillos = new Array(maxLadrillos); //Cantidad de ladrillos a construir
       var ladrillosDestruidos = new Array(ladrillos.length); //Con esto sabremos si ese ladrillo estara destruido o no
@@ -259,11 +259,19 @@
         }
       }
       function moverBola() {
-        if (contTop == parseInt(caja.style.height) - parseInt(pelota.style.height)) {
-          console.log("Valor de contTop: " + contTop);
-          perderLaPartida();
+        if(vidas >0){
+            if(contTop == parseInt(caja.style.height) - parseInt(pelota.style.height)) {
+              vidas--;
+              console.log("Vidas: "+vidas);
+              arriba=false;
+              console.log("Valor de contTop: " + contTop);
+            } 
+        
+        }else if(vidas ==0){
+            perderLaPartida();
 
-        } else if (!ganarLaPartida()) {
+        }
+        if (!ganarLaPartida()) {
 
           if (contTop == 0) {
             pelotaConPared.load();
@@ -527,7 +535,7 @@
       //nos muestra la informacion del juego
       function informacionDelJuego() {
         informacion.style.width="310px";
-        informacion.style.height="125px";
+        informacion.style.height="175px";
         informacion.style.color="#b5ff08";
         informacion.style.backgroundColor="#1707f2";
         informacion.style.padding="10px";
@@ -538,7 +546,9 @@
           + "<br>" + " <strong>Cantidad de ladrillos destruidos: </strong>" + cantLadrillosDestruidos
           + "<br>" + "<strong>Posicion de la barra con el raton: </strong>" + cx
           + "<br>" + " <strong>Posicion de la barra con las teclas: </strong>" + contLeftBarra
-          + "<br>" + " <strong>Puntos: </strong>" + puntos;
+          + "<br>" + " <strong>Puntos: </strong>" + puntos
+          + "<br>" + " <strong>Vidas: </strong>" + vidas
+          + "<br>" + " <strong>Nivel: </strong>" + "1";
       }
       function sumarPuntos() {
         if (cantLadrillosDestruidos >= 0 && cantLadrillosDestruidos <= 25) {
@@ -557,7 +567,7 @@
         }
       }
      
-       
+   
 
     }
   </script>
