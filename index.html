@@ -70,11 +70,13 @@
       var cantLadrillos = 0;//Cantidad de ladrillos que hay
       var ladrillosFila = 3;//el numero maximo de ladrillos que hay por fila
       var aux = ladrillosFila;//variable auxiliar que guardara el numero de ladrillos que habra por fila
-      var maxLadrillos = 3;
+      var maxLadrillos = 3;//Maximo de ladrillos que habra
       var haPulsadoEnter = false;
-      var barraLarga;
-      var intervaloAumentoBarra;
-      var aumentoBarra=5;
+      //Variables para aumentar la barra
+      var pastillaAumentarBarra;
+      var intervaloPastillaAumentarBarra;
+      var contTopPastillaAumentarBarra=5;
+      var existePastillaAumentarBarra=false;
       //LLamamos a la musica
       var comienzo = document.getElementById("comienzo");
       var empiezaElJuego = document.getElementById("empiezaElJuego");
@@ -83,20 +85,24 @@
       var barraConPelota = document.getElementById("barraConPelota");
       var partidaGanada = document.getElementById("partidaGanada");
       var partidaPerdida = document.getElementById("partidaPerdida");
+      var barraAumentada=document.getElementById("barraAumentada");
       comienzo.play();
       comienzo.loop=true;//La musica pasa a estar en bucle
       comienzo.duration = 3;
       //Variables para los puntos
       var puntos = 0;//puntos que tiene
       var sumaDePuntos = 10;//Cantidad de puntos que ira sumando
-      var aumento = 1;// Cuanto aumenta los ppuntos
+      var aumento = 1;// Cuanto aumenta los puntos
       var cambiarColor = false;
       var intervaloColor;//Intervalo para los colores de fondo para el texto si ha ganado o perdido la partida
       var titulo;//titulo del texto has perdido
       var divPuntos;//Caja que nos muestra los datos de la partida que ha ganado
+
       //Construimos los ladrillos
       var ladrillos = new Array(maxLadrillos); //Cantidad de ladrillos a construir
       var ladrillosDestruidos = new Array(ladrillos.length); //Con esto sabremos si ese ladrillo estara destruido o no
+      var posicionPastilla=Math.floor(Math.random()*ladrillos.length);
+
       while (fila <= 1) {
         if (fila == 1) {
           cantLadrillos = 0;
@@ -255,7 +261,6 @@
       function moverBola() {
         if (contTop == parseInt(caja.style.height) - parseInt(pelota.style.height)) {
           console.log("Valor de contTop: " + contTop);
-          clearInterval(intervaloAumentoBarra);
           perderLaPartida();
 
         } else if (!ganarLaPartida()) {
@@ -304,7 +309,7 @@
 
             if (contTop == parseInt(ladrillos[j].style.top) - parseInt(pelota.style.height)) {
               if (contLeft >= parseInt(ladrillos[j].style.left) && contLeft <= parseInt(ladrillos[j].style.left) + parseInt(ladrillos[j].style.width)) {
-                if(j==0){
+                if(j==posicionPastilla){
                   aumentarBarra();
                 }
                 caja.removeChild(ladrillos[j]);
@@ -321,7 +326,7 @@
 
             } else if (contTop == parseInt(ladrillos[j].style.top) + parseInt(ladrillos[j].style.height)) {
               if (contLeft >= parseInt(ladrillos[j].style.left) && contLeft <= parseInt(ladrillos[j].style.left) + parseInt(ladrillos[j].style.width)) {
-                if(j==0){
+                if(j==posicionPastilla){
                   aumentarBarra();
                 }
                 caja.removeChild(ladrillos[j]);
@@ -338,7 +343,7 @@
             }
             else if (contTop >= parseInt(ladrillos[j].style.top) && contTop <= parseInt(ladrillos[j].style.top) + parseInt(ladrillos[j].style.height)) {
               if (contLeft == parseInt(ladrillos[j].style.left)) {
-                if(i==0){
+                if(j==posicionPastilla){
                   aumentarBarra();
                 }
                 caja.removeChild(ladrillos[j]);
@@ -352,7 +357,7 @@
                 arriba = true;
                 izquierda = false;
               } else if (contLeft == parseInt(ladrillos[j].style.left) + parseInt(ladrillos[j].style.width) - parseInt(pelota.style.width)) {
-                if(i==0){
+                if(j==posicionPastilla){
                   aumentarBarra();
                 }
                 caja.removeChild(ladrillos[j]);
@@ -372,30 +377,36 @@
           function aumentarBarra(){
 
               
-              barraLarga=document.createElement("div");
-              barraLarga.style.width="20px";
-              barraLarga.style.height="10px";
-              barraLarga.style.backgroundColor="green";
-              barraLarga.style.borderRadius="5px";
-              barraLarga.style.position="absolute";
-              barraLarga.style.left=((parseInt(ladrillos[j].style.width))/2)+"px";
-              barraLarga.style.top=parseInt(ladrillos[j].style.height)+parseInt(ladrillos[j].style.top)+"px";
-              barraLarga.style.left=((parseInt(ladrillos[j].style.width))/2)+"px";
-              caja.appendChild(barraLarga);
-              intervaloAumentoBarra=setInterval(function(){
-                barraLarga.style.top=parseInt(parseInt(barraLarga.style.top)+aumentoBarra)+"px";
-                console.log("Altura de la pastilla: "+parseInt(parseInt(barraLarga.style.top)+parseInt(barraLarga.style.height)));
-                    if(parseInt(parseInt(barraLarga.style.top)+parseInt(barraLarga.style.height))==parseInt(barra.style.top)){
-                      if ((contLeftBarra || cx)>=barraLarga.style.left|| (contLeftBarra || cx) <= parseInt(barraLarga.style.left) + parseInt(barraLarga.style.width)||
-                      (contLeftBarra || cx)+parseInt(barra.style.width)>=barraLarga.style.left|| (contLeftBarra || cx)+parseInt(barra.style.width) <= parseInt(barraLarga.style.left) + parseInt(barraLarga.style.width) ) {
-                            clearInterval(intervaloAumentoBarra);
-                            barra.style.width=parseInt(barra.style.width)+parseInt(barraLarga.style.width)+"px";
-                            caja.removeChild(barraLarga);
+              pastillaAumentarBarra=document.createElement("div");
+              pastillaAumentarBarra.style.width="20px";
+              pastillaAumentarBarra.style.height="10px";
+              pastillaAumentarBarra.style.backgroundColor="green";
+              pastillaAumentarBarra.style.borderRadius="5px";
+              pastillaAumentarBarra.style.position="absolute";
+              pastillaAumentarBarra.style.left=parseInt(ladrillos[j].style.left)+"px";
+              pastillaAumentarBarra.style.top=parseInt(ladrillos[j].style.height)+parseInt(ladrillos[j].style.top)+"px";
+              caja.appendChild(pastillaAumentarBarra);
+              existePastillaAumentarBarra=true;
+              intervaloPastillaAumentarBarra=setInterval(function(){
+                pastillaAumentarBarra.style.top=parseInt(parseInt(pastillaAumentarBarra.style.top)+contTopPastillaAumentarBarra)+"px";
+                console.log("Altura de la pastilla: "+parseInt(parseInt(pastillaAumentarBarra.style.top)+parseInt(pastillaAumentarBarra.style.height)));
+                    if(parseInt(parseInt(pastillaAumentarBarra.style.top)+parseInt(pastillaAumentarBarra.style.height))>=parseInt(barra.style.top)&&parseInt(parseInt(pastillaAumentarBarra.style.top)+parseInt(pastillaAumentarBarra.style.height))<=parseInt(barra.style.top)+parseInt(barra.style.height)){
+                      if ((contLeftBarra || cx)>=pastillaAumentarBarra.style.left|| (contLeftBarra || cx) <= parseInt(pastillaAumentarBarra.style.left) + parseInt(pastillaAumentarBarra.style.width)&&
+                      (contLeftBarra || cx)+parseInt(barra.style.width)>=parseInt(pastillaAumentarBarra.style.left) ||(contLeftBarra || cx)+parseInt(barra.style.width) <= parseInt(pastillaAumentarBarra.style.left) + parseInt(pastillaAumentarBarra.style.width) ) {
+                            clearInterval(intervaloPastillaAumentarBarra);
+                            barra.style.width=parseInt(barra.style.width)+parseInt(pastillaAumentarBarra.style.width)+"px";
+                            barraAumentada.play();
+                            if(existePastillaAumentarBarra){
+                              caja.removeChild(pastillaAumentarBarra);
+                              existePastillaAumentarBarra=false;
+                            }
                       }
-                    }else if(parseInt(parseInt(barraLarga.style.top)+parseInt(barraLarga.style.height))==parseInt(caja.style.height)){
-                      clearInterval(intervaloAumentoBarra);
-                      caja.removeChild(barraLarga);
-
+                    }else if(parseInt(parseInt(pastillaAumentarBarra.style.top)+parseInt(pastillaAumentarBarra.style.height))==parseInt(caja.style.height)){
+                      clearInterval(intervaloPastillaAumentarBarra);
+                      if(existePastillaAumentarBarra){
+                        caja.removeChild(pastillaAumentarBarra);
+                        existePastillaAumentarBarra=false;
+                      }
                     }
               },50)    
                   
@@ -460,6 +471,11 @@
           caja.appendChild(divPuntos);
           caja.removeChild(pelota);
           caja.removeChild(barra);
+          if(existePastillaAumentarBarra){
+          clearInterval(intervaloPastillaAumentarBarra);
+          caja.removeChild(pastillaAumentarBarra);
+          existePastillaAumentarBarra=false;
+        }
           panel.removeChild(informacion);
 
           partidaGanada.play();
@@ -501,6 +517,11 @@
 
         perder.appendChild(titulo);
         caja.appendChild(perder);
+        if(existePastillaAumentarBarra){
+          clearInterval(intervaloPastillaAumentarBarra);
+          caja.removeChild(pastillaAumentarBarra);
+          existePastillaAumentarBarra=false;
+        }
         partidaPerdida.play();
       }
       //nos muestra la informacion del juego
@@ -574,6 +595,7 @@
   <audio id="barraConPelota" src="music/barra/barra.wav"></audio>
   <audio id="partidaGanada" src="music/ganada/ganada.wav"></audio>
   <audio id="partidaPerdida" src="music/perder/perder.wav"></audio>
+  <audio id="barraAumentada" src="music/barra/barraAumentada.wav"></audio>
 </body>
 
 </html>
