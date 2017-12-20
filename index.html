@@ -69,9 +69,9 @@
       var distancia = 25;//la distancia de altura que hay entre filas
       var fila = 1;//el numero de fila
       var cantLadrillos = 0;//Cantidad de ladrillos que hay
-      var ladrillosFila = 3;//el numero maximo de ladrillos que hay por fila
+      var ladrillosFila = 14;//el numero maximo de ladrillos que hay por fila
       var aux = ladrillosFila;//variable auxiliar que guardara el numero de ladrillos que habra por fila
-      var maxLadrillos = 3;//Maximo de ladrillos que habra
+      var maxLadrillos = 112;//Maximo de ladrillos que habra
       var haPulsadoEnter = false;
       //Variables para aumentar la barra
       var pastillaAumentarBarra;
@@ -105,7 +105,7 @@
       var ladrillosDestruidos = new Array(ladrillos.length); //Con esto sabremos si ese ladrillo estara destruido o no
       var posicionPastilla=Math.floor(Math.random()*ladrillos.length);
       console.log("Posicion de donde se ha guardado la pastilla: "+posicionPastilla);
-      while (fila <= 1) {
+      while (fila <= 8) {
         if (fila == 1) {
           cantLadrillos = 0;
         } else {
