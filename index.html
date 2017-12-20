@@ -509,7 +509,7 @@
           panel.removeChild(informacion);
           duranteLaPartida.currentTime=duranteLaPartida.duration;
           duranteLaPartida.loop=false;
-
+          barraAumentada.pause();
           partidaGanada.play();
           return true;
         } else {
@@ -557,6 +557,7 @@
         }
         duranteLaPartida.currentTime=duranteLaPartida.duration;
         duranteLaPartida.loop=false;
+        barraAumentada.pause();
         partidaPerdida.play();
       }
       //nos muestra la informacion del juego
