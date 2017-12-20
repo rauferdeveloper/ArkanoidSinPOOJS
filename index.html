@@ -222,6 +222,8 @@
               intervalo = setInterval(function () { moverBola() }, 20);
               parar = true;
               pausa=false;
+              duranteLaPartida.play();
+                duranteLaPartida.loop=true;
             }
           }
           if (parar) {
@@ -229,6 +231,7 @@
               clearInterval(intervalo);
               parar = false;
               pausa=true;
+              duranteLaPartida.pause();
             }
           }
           if(!pausa){
@@ -423,7 +426,7 @@
                                 barra.style.width=parseInt(barra.style.width)-parseInt(pastillaAumentarBarra.style.width)+"px";
                                 barraAumentada.play();
 
-                              },15000);
+                              },60000);
                               caja.removeChild(pastillaAumentarBarra);
                               existePastillaAumentarBarra=false;
                             }
