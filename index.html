@@ -58,6 +58,7 @@
       var hasGanado = ""; //Texto a mostrar si has ganado
       var hasPerdido = ""; //Texto a mostrar si has perdido
       var ganar;//Caja que vamos a crear si has ganado la partida
+      var pausa=false;
       var perder; //Caja que vamos a crear si has perdido la partida
       var intervalo;//Velocidad de la pelota
       var izquierda = false;//Con esto sabremos si la pelota esta a la izquierda o no
@@ -68,9 +69,9 @@
       var distancia = 25;//la distancia de altura que hay entre filas
       var fila = 1;//el numero de fila
       var cantLadrillos = 0;//Cantidad de ladrillos que hay
-      var ladrillosFila = 14;//el numero maximo de ladrillos que hay por fila
+      var ladrillosFila = 3;//el numero maximo de ladrillos que hay por fila
       var aux = ladrillosFila;//variable auxiliar que guardara el numero de ladrillos que habra por fila
-      var maxLadrillos = 112;//Maximo de ladrillos que habra
+      var maxLadrillos = 3;//Maximo de ladrillos que habra
       var haPulsadoEnter = false;
       //Variables para aumentar la barra
       var pastillaAumentarBarra;
@@ -86,6 +87,7 @@
       var partidaGanada = document.getElementById("partidaGanada");
       var partidaPerdida = document.getElementById("partidaPerdida");
       var barraAumentada=document.getElementById("barraAumentada");
+      var duranteLaPartida = document.getElementById("duranteLaPartida");
       comienzo.play();
       comienzo.loop=true;//La musica pasa a estar en bucle
       comienzo.duration = 3;
@@ -103,7 +105,7 @@
       var ladrillosDestruidos = new Array(ladrillos.length); //Con esto sabremos si ese ladrillo estara destruido o no
       var posicionPastilla=Math.floor(Math.random()*ladrillos.length);
       console.log("Posicion de donde se ha guardado la pastilla: "+posicionPastilla);
-      while (fila <= 8) {
+      while (fila <= 1) {
         if (fila == 1) {
           cantLadrillos = 0;
         } else {
@@ -172,11 +174,14 @@
           cx = eventoBarra.clientX;
           cy = eventoBarra.clientY;
           //console.log("Cliente X "+cx+" Cliente Y "+cy);
-          if (cx >= 0 && cx <= parseInt(caja.style.width) - parseInt(barra.style.width)) {
-            barra.style.left = cx + "px";
-            contLeftBarra = cx;
-            informacionDelJuego();
+          if(!pausa){
+              if (cx >= 0 && cx <= parseInt(caja.style.width) - parseInt(barra.style.width)) {
+              barra.style.left = cx + "px";
+              contLeftBarra = cx;
+              informacionDelJuego();
+            }
           }
+         
           return false;
         } else {
           return true;
@@ -203,9 +208,12 @@
               comienzo.pause();
               empiezaElJuego.play();
               empiezaElJuego.onended = function () {
+            
                 parar = true;
                 intervalo = setInterval(function () { moverBola() }, 20);
                 haPulsadoEnter = true;
+                duranteLaPartida.play();
+                duranteLaPartida.loop=true;
               }
             }
           }
@@ -213,37 +221,41 @@
             if (evento.keyCode == 82) { //Si presionamos la tecla R se renauda el juego
               intervalo = setInterval(function () { moverBola() }, 20);
               parar = true;
-
+              pausa=false;
             }
           }
           if (parar) {
             if (evento.keyCode == 80) { //Si presionamos la tecla P se pausa el juego
               clearInterval(intervalo);
               parar = false;
+              pausa=true;
             }
           }
-          if (evento.keyCode == 90 || evento.keyCode == 37) { //Si presionamos la tecla Z o flecha izquierda la barra se mueve hacia a la izquierda
-            if (contLeftBarra <= parseInt(caja.style.width) - parseInt(barra.style.width) && contLeftBarra > 0) {
-              contLeftBarra -= 20;
-              if (contLeftBarra < 0) {
-                contLeftBarra = 0;
-              }
-              console.log(contLeftBarra);
-              barra.style.left = contLeftBarra + "px";
+          if(!pausa){
+            if (evento.keyCode == 90 || evento.keyCode == 37) { //Si presionamos la tecla Z o flecha izquierda la barra se mueve hacia a la izquierda
+              if (contLeftBarra <= parseInt(caja.style.width) - parseInt(barra.style.width) && contLeftBarra > 0) {
+                contLeftBarra -= 20;
+                if (contLeftBarra < 0) {
+                  contLeftBarra = 0;
+                }
+                console.log(contLeftBarra);
+                barra.style.left = contLeftBarra + "px";
 
-            }
+              }
           } else if (evento.keyCode == 88 || evento.keyCode == 39) { //Si presionamos la tecla X o flecha derecha la barra se mueve hacia a la derecha
-            if (contLeftBarra >= 0 && contLeftBarra < parseInt(caja.style.width) - parseInt(barra.style.width)) {
-              contLeftBarra += 20;
-              if (contLeftBarra > parseInt(caja.style.width) - parseInt(barra.style.width)) {
-                contLeftBarra = parseInt(caja.style.width) - parseInt(barra.style.width);
+              if (contLeftBarra >= 0 && contLeftBarra < parseInt(caja.style.width) - parseInt(barra.style.width)) {
+                contLeftBarra += 20;
+                if (contLeftBarra > parseInt(caja.style.width) - parseInt(barra.style.width)) {
+                  contLeftBarra = parseInt(caja.style.width) - parseInt(barra.style.width);
+
+                }
+                console.log(contLeftBarra);
+                barra.style.left = contLeftBarra + "px";
 
               }
-              console.log(contLeftBarra);
-              barra.style.left = contLeftBarra + "px";
-
             }
           }
+          
           if (evento.keyCode == 32) {
             window.location.reload();
 
@@ -404,9 +416,14 @@
                       if ((contLeftBarra || cx)>=pastillaAumentarBarra.style.left|| (contLeftBarra || cx) <= parseInt(pastillaAumentarBarra.style.left) + parseInt(pastillaAumentarBarra.style.width)&&
                       (contLeftBarra || cx)+parseInt(barra.style.width)>=parseInt(pastillaAumentarBarra.style.left) ||(contLeftBarra || cx)+parseInt(barra.style.width) <= parseInt(pastillaAumentarBarra.style.left) + parseInt(pastillaAumentarBarra.style.width) ) {
                             clearInterval(intervaloPastillaAumentarBarra);
-                            barra.style.width=parseInt(barra.style.width)+parseInt(pastillaAumentarBarra.style.width)+"px";
-                            barraAumentada.play();
+                             barra.style.width=parseInt(barra.style.width)+parseInt(pastillaAumentarBarra.style.width)+"px";
+                             barraAumentada.play();
                             if(existePastillaAumentarBarra){
+                              setTimeout(function(){
+                                barra.style.width=parseInt(barra.style.width)-parseInt(pastillaAumentarBarra.style.width)+"px";
+                                barraAumentada.play();
+
+                              },15000);
                               caja.removeChild(pastillaAumentarBarra);
                               existePastillaAumentarBarra=false;
                             }
@@ -487,6 +504,8 @@
           existePastillaAumentarBarra=false;
         }
           panel.removeChild(informacion);
+          duranteLaPartida.currentTime=duranteLaPartida.duration;
+          duranteLaPartida.loop=false;
 
           partidaGanada.play();
           return true;
@@ -524,6 +543,7 @@
 
         titulo.appendChild(hasPerdido);
 
+        pausa=true;
 
         perder.appendChild(titulo);
         caja.appendChild(perder);
@@ -532,6 +552,8 @@
           caja.removeChild(pastillaAumentarBarra);
           existePastillaAumentarBarra=false;
         }
+        duranteLaPartida.currentTime=duranteLaPartida.duration;
+        duranteLaPartida.loop=false;
         partidaPerdida.play();
       }
       //nos muestra la informacion del juego
@@ -608,5 +630,6 @@
   <audio id="partidaGanada" src="music/ganada/ganada.wav"></audio>
   <audio id="partidaPerdida" src="music/perder/perder.wav"></audio>
   <audio id="barraAumentada" src="music/barra/barraAumentada.wav"></audio>
+  <audio  id="duranteLaPartida" src="music/partida/partida.mp3"></audio>
 </body>
 </html>
