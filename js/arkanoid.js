@@ -444,7 +444,13 @@ window.onload = function () {
           fila=1;
           clearInterval(intervalo);
           pelota.style.left = "420px"
-              pelota.style.top = "500px";
+          pelota.style.top = "500px";
+          barra.style.left = "380px";
+          barra.style.top = "520px";
+          contTop=parseInt(pelota.style.top);
+          contLeft=parseInt(pelota.style.left);
+          setTimeout(function(){intervalo = setInterval(function () { moverBola() }, 20)},500);
+
           ladrillosNivelDos = new Array(maxLadrillos); 
           ladrillosDestruidosNivelDos = new Array(ladrillosNivelDos.length); 
           ladrillosDobles=new Array(ladrillosNivelDos.length);
