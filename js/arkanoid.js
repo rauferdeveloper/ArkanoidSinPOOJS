@@ -65,7 +65,7 @@ window.onload = function () {
     comienzo.play();
     comienzo.loop=true;//La musica pasa a estar en bucle
     comienzo.duration = 3;
-    var nivel=1;
+    var nivel=2;
     //Variables para los puntos
     var puntos = 0;//puntos que tiene
     var sumaDePuntos = 10;//Cantidad de puntos que ira sumando
@@ -90,7 +90,7 @@ window.onload = function () {
     var cuentaAtrasBarra;
     
 
-    nivelUno();
+    nivelDos();
     caja.onmousemove = manejarRaton// para mover la barra con el raton
     document.onkeydown = manejarTeclado//Diversas teclas que necesitaremos usar 
     function manejarRaton(elEvento) {
