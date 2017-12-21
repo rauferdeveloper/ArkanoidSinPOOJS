@@ -39,7 +39,7 @@ window.onload = function () {
     //Para saber si ha terminado el juego o no
     var cx=0;//Cliente x del Raton que usaremos para la controlar la barra
     var distancia = 25;//la distancia de altura que hay entre filas
-    var fila = 1;//el numero de fila
+    var fila ;//el numero de fila
     var cantLadrillos;//Cantidad de ladrillos que hay
     var ladrillosFila;//el numero maximo de ladrillos que hay por fila
     var aux;//variable auxiliar que guardara el numero de ladrillos que habra por fila
@@ -65,7 +65,7 @@ window.onload = function () {
     comienzo.play();
     comienzo.loop=true;//La musica pasa a estar en bucle
     comienzo.duration = 3;
-    var nivel=2;
+    var nivel=1;
     //Variables para los puntos
     var puntos = 0;//puntos que tiene
     var sumaDePuntos = 10;//Cantidad de puntos que ira sumando
@@ -81,7 +81,7 @@ window.onload = function () {
     var ladrillosDestruidosNivelUno; //Con esto sabremos si ese ladrillo estara destruido o no
     var ladrillosDestruidosNivelDos; //Con esto sabremos si ese ladrillo estara destruido o no
 
-    var ladrillosDobles;
+    ladrillosDobles=new Array();
     var ladrillosDoblesDestruidos;
     var posicionPastilla;
     //Informacion del juego
@@ -90,7 +90,7 @@ window.onload = function () {
     var cuentaAtrasBarra;
     
 
-    nivelDos();
+    nivelUno();
     caja.onmousemove = manejarRaton// para mover la barra con el raton
     document.onkeydown = manejarTeclado//Diversas teclas que necesitaremos usar 
     function manejarRaton(elEvento) {
@@ -295,6 +295,7 @@ window.onload = function () {
             if(cantLadrillosDestruidos==1){
               nivel=2;
               nivelDos();
+              
             }    
           }
        
@@ -423,6 +424,7 @@ window.onload = function () {
           cantLadrillos=0;
           ladrillosFila=1;
           aux=ladrillosFila;
+          fila=1;
           maxLadrillos=1;
           ladrillosNivelUno = new Array(maxLadrillos); 
           ladrillosDestruidosNivelUno=new Array(ladrillosNivelUno.length);
@@ -438,7 +440,11 @@ window.onload = function () {
           ladrillosFila=14;
           cantLadrillos=0;
           aux=ladrillosFila;
-          maxLadrillos=56;
+          maxLadrillos=112;
+          fila=1;
+          clearInterval(intervalo);
+          pelota.style.left = "420px"
+              pelota.style.top = "500px";
           ladrillosNivelDos = new Array(maxLadrillos); 
           ladrillosDestruidosNivelDos = new Array(ladrillosNivelDos.length); 
           ladrillosDobles=new Array(ladrillosNivelDos.length);
@@ -446,7 +452,7 @@ window.onload = function () {
           posicionPastilla=Math.floor(Math.random()*ladrillosNivelDos.length);
           console.log("Posicion de donde se ha guardado la pastilla: "+posicionPastilla);
           construirLadrillosNivelDos();
-
+         
       }
         
     
@@ -812,6 +818,7 @@ window.onload = function () {
     }
     
     function construirLadrillosNivelDos(){
+      alert(fila)
       while (fila <=8 ) {
         if(fila==1){
           cantLadrillos=0;
@@ -821,6 +828,7 @@ window.onload = function () {
         }
 
         for (i = cantLadrillos; i < ladrillosFila; i++) {
+          //alert(i)
 
           
             ladrillosNivelDos[i] = document.createElement("div");
@@ -828,6 +836,7 @@ window.onload = function () {
             
             ladrillosDobles[i] = document.createElement("div");
             ladrillosDobles[i].style.width = "50px";
+           
             ladrillosNivelDos[i].style.height = "20px";
             ladrillosNivelDos[i].style.position = "absolute";
             ladrillosDobles[i].style.height = "20px";
@@ -882,14 +891,17 @@ window.onload = function () {
             caja.appendChild(ladrillosDobles[i])
             ladrillosDestruidosNivelDos[i]= false;//Como aqui los estamos construyendo todos pues le decimos que ninguno esta destruido todavia
             ladrillosDoblesDestruidos[i]=false;
+            //alert(i+': '+ladrillosDobles[i].style.top);
           }
-        
+          alert( ladrillosDobles.length );
         console.log("cantLadrillos: " + cantLadrillos);
         console.log("maxLadrillosFila: " + ladrillosFila);
-        fila+=2;
+        alert("Cantidad de ladrillos: "+cantLadrillos);
+
+        fila++;
       }
-      
-  }
+     alert( ladrillosDobles.length );
+  }// fin construirladrillosniveldos()
   
   
         
