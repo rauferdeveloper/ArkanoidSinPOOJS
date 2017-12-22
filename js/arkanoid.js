@@ -114,9 +114,9 @@ window.onload = function () {
     }
     //para controlar las posiciones es solo para depurar
     document.onclick=function(elEvento){
-      var eventoBarra=window.event || elEvento;
-       cx=eventoBarra.clientX;
-        cy=eventoBarra.clientY;
+      var evento=window.event || elEvento;
+       cx=evento.clientX;
+        cy=evento.clientY;
         //console.log("Cliente X "+cx+" Cliente Y "+cy);
     }
     
@@ -276,7 +276,6 @@ window.onload = function () {
     function colisionesBarra() {
       if (contTop == parseInt(barra.style.top)) {
         if (contLeft >= (contLeftBarra || cx) && contLeft <= (contLeftBarra || cx) + parseInt(barra.style.width)) {
-
           barraConPelota.play();
           arriba = false;
         }
@@ -638,44 +637,42 @@ window.onload = function () {
             arriba = true;
           }
         }
-         else if (contTop >= parseInt(ladrillosNivelUno[j].style.top) && contTop <= parseInt(ladrillosNivelUno[j].style.top) + parseInt(ladrillosNivelUno[j].style.height)) {
-          if (contLeft + parseInt(pelota.style.width) == parseInt(ladrillosNivelUno[j].style.left)) {
-            if(j==posicionPastilla){
-              aumentarBarra(ladrillosNivelUno,j);
-            }
-            caja.removeChild(ladrillosNivelUno[j]);
+          else if (contTop >= parseInt(ladrillosNivelUno[j].style.top) && contTop <= parseInt(ladrillosNivelUno[j].style.top) + parseInt(ladrillosNivelUno[j].style.height)) {
+            if (contLeft + parseInt(pelota.style.width) == parseInt(ladrillosNivelUno[j].style.left)) {
+              if(j==posicionPastilla){
+                aumentarBarra(ladrillosNivelUno,j);
+              }
+              caja.removeChild(ladrillosNivelUno[j]);
 
-            pelotaConLadrillo.play();
-            sumarPuntos();
+              pelotaConLadrillo.play();
+              sumarPuntos();
 
-            cantLadrillosDestruidos++;
-            //console.log("Cantidad de ladrillos destruidos: "+cantLadrillosDestruidos);
-            ladrillosDestruidosNivelUno[j] = true;
-            arriba = true;
-            izquierda = false;
-          } else if (contLeft == parseInt(ladrillosNivelUno[j].style.left) + parseInt(ladrillosNivelUno[j].style.width) ) {
-            if(j==posicionPastilla){
-              aumentarBarra(ladrillosNivelUno,j);
+              cantLadrillosDestruidos++;
+              //console.log("Cantidad de ladrillos destruidos: "+cantLadrillosDestruidos);
+              ladrillosDestruidosNivelUno[j] = true;
+              arriba = true;
+              izquierda = false;
+            } else if (contLeft == parseInt(ladrillosNivelUno[j].style.left) + parseInt(ladrillosNivelUno[j].style.width) ) {
+              if(j==posicionPastilla){
+                aumentarBarra(ladrillosNivelUno,j);
+              }
+              caja.removeChild(ladrillosNivelUno[j]);
+              pelotaConLadrillo.play();
+              cantLadrillosDestruidos++;
+              //console.log("Cantidad de ladrillos destruidos: "+cantLadrillosDestruidos);
+              ladrillosDestruidosNivelUno[j] = true;
+              arriba = true;
+              izquierda = true;
+              sumarPuntos();
+
             }
-            caja.removeChild(ladrillosNivelUno[j]);
-            pelotaConLadrillo.play();
-            cantLadrillosDestruidos++;
-            //console.log("Cantidad de ladrillos destruidos: "+cantLadrillosDestruidos);
-            ladrillosDestruidosNivelUno[j] = true;
-            arriba = true;
-            izquierda = true;
-            sumarPuntos();
 
           }
-
-        }
 
       }
       
     }
-   
-  
-}
+  }
     //para construir los ladrillos del nivel uno
     function construirLadrillos(){
       while (fila <= 8) {//seran 8 filas
@@ -731,9 +728,6 @@ window.onload = function () {
           }
             caja.appendChild(ladrillosNivelUno[i]);//añadimos cada uno a caja
             ladrillosDestruidosNivelUno[i] = false;//Como aqui los estamos construyendo todos pues le decimos que ninguno esta destruido todavia
-          
-          
-         
         }
         fila++;
      }
@@ -828,13 +822,15 @@ window.onload = function () {
           pastillaAumentarBarra.style.position="absolute";
           pastillaAumentarBarra.style.left=parseInt(ladrillos[posicion].style.left)+"px";
           pastillaAumentarBarra.style.top=parseInt(ladrillos[posicion].style.height)+parseInt(ladrillos[posicion].style.top)+"px";
-          caja.appendChild(pastillaAumentarBarra);
+          caja.appendChild(pastillaAumentarBarra);//creo la pastilla en la caja
           existePastillaAumentarBarra=true;
-          intervaloPastillaAumentarBarra=setInterval(function(){
-            pastillaAumentarBarra.style.top=parseInt(parseInt(pastillaAumentarBarra.style.top)+contTopPastillaAumentarBarra)+"px";
+          intervaloPastillaAumentarBarra=setInterval(function(){// el movimiento de la pastilla
+            pastillaAumentarBarra.style.top=parseInt(parseInt(pastillaAumentarBarra.style.top)+contTopPastillaAumentarBarra)+"px";//aqui va bajando poco a poco
             //console.log("Altura de la pastilla: "+parseInt(parseInt(pastillaAumentarBarra.style.top)+parseInt(pastillaAumentarBarra.style.height)));
-                if(parseInt(parseInt(pastillaAumentarBarra.style.top)+parseInt(pastillaAumentarBarra.style.height))>=parseInt(barra.style.top)&&parseInt(parseInt(pastillaAumentarBarra.style.top)+parseInt(pastillaAumentarBarra.style.height))<=parseInt(barra.style.top)+parseInt(barra.style.height)){
-                  if ((contLeftBarra || cx)>=pastillaAumentarBarra.style.left|| (contLeftBarra || cx) <= parseInt(pastillaAumentarBarra.style.left) + parseInt(pastillaAumentarBarra.style.width)&&
+            //si la pastilla se encuentra en la misma altura que la barra entra en la siguiente condicion    
+            if(parseInt(parseInt(pastillaAumentarBarra.style.top)+parseInt(pastillaAumentarBarra.style.height))>=parseInt(barra.style.top)&&parseInt(parseInt(pastillaAumentarBarra.style.top)+parseInt(pastillaAumentarBarra.style.height))<=parseInt(barra.style.top)+parseInt(barra.style.height)){
+                 //aqui evaluo todas las posibilidades para que la barra coja la pastilla
+              if ((contLeftBarra || cx)>=pastillaAumentarBarra.style.left|| (contLeftBarra || cx) <= parseInt(pastillaAumentarBarra.style.left) + parseInt(pastillaAumentarBarra.style.width)&&
                   (contLeftBarra || cx)+parseInt(barra.style.width)>=parseInt(pastillaAumentarBarra.style.left) ||(contLeftBarra || cx)+parseInt(barra.style.width) <= parseInt(pastillaAumentarBarra.style.left) + parseInt(pastillaAumentarBarra.style.width) ) {
                         clearInterval(intervaloPastillaAumentarBarra);
                          barra.style.width=parseInt(barra.style.width)+parseInt(pastillaAumentarBarra.style.width)+"px";
@@ -849,7 +845,7 @@ window.onload = function () {
                           existePastillaAumentarBarra=false;
                         }
                   }
-                }else if(parseInt(parseInt(pastillaAumentarBarra.style.top)+parseInt(pastillaAumentarBarra.style.height))==parseInt(caja.style.height)){
+                }else if(parseInt(parseInt(pastillaAumentarBarra.style.top)+parseInt(pastillaAumentarBarra.style.height))==parseInt(caja.style.height)){//si llega al tocar el suelo y no llega darle la barra desaparece
                   clearInterval(intervaloPastillaAumentarBarra);
                   if(existePastillaAumentarBarra){
                     caja.removeChild(pastillaAumentarBarra);
@@ -871,8 +867,8 @@ window.onload = function () {
       informacion.style.padding="10px";
 
       informacion.innerHTML = "<strong>Informacion del juego:</strong>"
-        + "<br>" + "<strong>Posicion X (top) de la pelota:  </strong>" + contTop
-        + "<br>" + " <strong>Posicion Y (left) de la pelota: </strong>" + contLeft
+        + "<br>" + "<strong>Posicion X (left) de la pelota:  </strong>" + contLeft
+        + "<br>" + " <strong>Posicion Y (top) de la pelota: </strong>" + contTop
         + "<br>" + " <strong>Cantidad de ladrillos destruidos: </strong>" + cantLadrillosDestruidos
         + "<br>" + "<strong>Posicion de la barra con el raton: </strong>" + cx
         + "<br>" + " <strong>Posicion de la barra con las teclas: </strong>" + contLeftBarra
@@ -881,40 +877,40 @@ window.onload = function () {
         + "<br>" + " <strong>Nivel: </strong>" + nivel;
     }
     function sumarPuntos() {
-      if (cantLadrillosDestruidos >= 0 && cantLadrillosDestruidos <= 25) {
-        puntos = puntos + sumaDePuntos * aumento;
-      } if (cantLadrillosDestruidos > 25 && cantLadrillosDestruidos <= 55) {
+      if (cantLadrillosDestruidos >= 0 && cantLadrillosDestruidos <= 80) {
+        puntos = puntos + sumaDePuntos * aumento;//puntos +10
+      } if (cantLadrillosDestruidos > 80 && cantLadrillosDestruidos <= 150) {
         aumento = 2;
-        puntos = puntos + (sumaDePuntos * aumento);
-      } if (cantLadrillosDestruidos > 55 && cantLadrillosDestruidos <= 85) {
+        puntos = puntos + (sumaDePuntos * aumento);//puntos +20
+      } if (cantLadrillosDestruidos > 150 && cantLadrillosDestruidos <= 210) {
         aumento = 3;
-        puntos = puntos + (sumaDePuntos * aumento);
+        puntos = puntos + (sumaDePuntos * aumento);//puntos +30
 
-      } if (cantLadrillosDestruidos > 85&& cantLadrillosDestruidos<=110) {
+      } if (cantLadrillosDestruidos > 210&& cantLadrillosDestruidos<=260) {
         aumento = 4;
-        puntos = puntos + (sumaDePuntos * aumento);
+        puntos = puntos + (sumaDePuntos * aumento);//puntos +40
 
-      }if (cantLadrillosDestruidos > 110&& cantLadrillosDestruidos<=150) {
+      }if (cantLadrillosDestruidos > 260&& cantLadrillosDestruidos<=290) {
         aumento = 5;
-        puntos = puntos + (sumaDePuntos * aumento);
+        puntos = puntos + (sumaDePuntos * aumento);//puntos +50
 
       }
-      if (cantLadrillosDestruidos > 150&& cantLadrillosDestruidos<=180) {
+      if (cantLadrillosDestruidos > 290&& cantLadrillosDestruidos<=300) {
         aumento = 6;
-        puntos = puntos + (sumaDePuntos * aumento);
+        puntos = puntos + (sumaDePuntos * aumento);//puntos +60
 
       }    
-      if (cantLadrillosDestruidos > 180&& cantLadrillosDestruidos<=223) {
+      if (cantLadrillosDestruidos > 300&& cantLadrillosDestruidos<=310) {
         aumento = 7;
-        puntos = puntos + (sumaDePuntos * aumento);
+        puntos = puntos + (sumaDePuntos * aumento);//puntos +70
 
       }
-      if(cantLadrillosDestruidos > 223) {
+      if(cantLadrillosDestruidos > 310) {
         aumento = 10;
-        puntos = puntos + (sumaDePuntos * aumento);
+        puntos = puntos + (sumaDePuntos * aumento);//puntos +80
 
       }
-    }
+    }//cierre de la funcion sumarPuntos
    
-  }
- 
+  }//cierre del window.onload
+ //Nota para la siguiente controlare las esquinas de los ladrillos y controlare mejor el rebote de la pelota con la barra
